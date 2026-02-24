@@ -115,6 +115,12 @@ async def _detect_captcha_on_page(page: Page) -> list[str]:
     """Inspect the loaded page for captcha signatures. Returns provider names found."""
     found: list[str] = []
 
+    # Fetch page HTML once for script-tag checks across all providers
+    try:
+        page_html = await page.content()
+    except Exception:
+        page_html = ""
+
     for provider, sigs in CAPTCHA_SIGNATURES.items():
         detected = False
 
@@ -137,16 +143,12 @@ async def _detect_captcha_on_page(page: Page) -> list[str]:
                 except Exception:
                     pass
 
-        # Check script tags
-        if not detected and sigs["scripts"]:
-            try:
-                page_html = await page.content()
-                for script_sig in sigs["scripts"]:
-                    if script_sig in page_html:
-                        detected = True
-                        break
-            except Exception:
-                pass
+        # Check script tags in the pre-fetched HTML
+        if not detected and sigs["scripts"] and page_html:
+            for script_sig in sigs["scripts"]:
+                if script_sig in page_html:
+                    detected = True
+                    break
 
         if detected:
             found.append(provider)

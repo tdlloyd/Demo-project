@@ -81,7 +81,7 @@ def _reverse_ip(ip: str) -> str:
 async def _query_dnsbl(ip: str, zone: str) -> bool:
     """Return True if the IP is listed in the given DNSBL zone."""
     query = f"{_reverse_ip(ip)}.{zone}"
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         await loop.run_in_executor(None, socket.getaddrinfo, query, None)
         return True   # got an answer → listed

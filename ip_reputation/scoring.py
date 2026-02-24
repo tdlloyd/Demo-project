@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, field
 from ip_reputation.captcha_detector import SiteResult
 from ip_reputation.ip_checks import IPInfo
@@ -16,7 +15,6 @@ class ReputationReport:
     grade: str = ""                     # A+ … F
     captcha_rate: float = 0.0           # fraction of visits that hit a captcha
     block_rate: float = 0.0             # fraction of visits that were blocked
-    captcha_scores: dict = field(default_factory=dict)   # per-provider breakdown
     ip_info: IPInfo | None = None
     component_scores: dict = field(default_factory=dict) # sub-scores for transparency
 

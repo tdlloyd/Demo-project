@@ -6,7 +6,7 @@ import json
 import logging
 import sys
 
-from ip_reputation.captcha_detector import run_captcha_scan, DEFAULT_TEST_SITES
+from ip_reputation.captcha_detector import run_captcha_scan
 from ip_reputation.ip_checks import gather_ip_intelligence
 from ip_reputation.scoring import compute_reputation, format_report
 
